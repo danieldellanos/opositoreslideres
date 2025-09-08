@@ -1,8 +1,8 @@
 {
     "app_id": "com.opositoreslideres.mobile",
     "appname": "Opositoreslideres",
-    "versioncode": 45200,
-    "versionname": "4.5.2",
+    "versioncode": 50003,
+    "versionname": "5.0.0",
     "cache_update_frequency_usually": 420000,
     "cache_update_frequency_often": 1200000,
     "cache_update_frequency_sometimes": 3600000,
@@ -94,6 +94,7 @@
     "enableonboarding": true,
     "forceColorScheme": "",
     "forceLoginLogo": false,
+    "showTopLogo": "hidden",
     "ioswebviewscheme": "moodleappfs",
     "appstores": {
         "android": "com.opositoreslideres.mobile",
@@ -130,5 +131,6 @@
             ]
         }
     },
-    "clearIABSessionWhenAutoLogin": "android"
+    "clearIABSessionWhenAutoLogin": "android",
+    "collapsibleItemsExpanded": false
 }

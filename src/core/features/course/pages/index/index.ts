@@ -20,17 +20,18 @@ import { CoreCourseFormatDelegate } from '../../services/format-delegate';
 import { CoreCourseOptionsDelegate } from '../../services/course-options-delegate';
 import { CoreCourseAnyCourseData } from '@features/courses/services/courses';
 import { CoreEventObserver, CoreEvents } from '@singletons/events';
-import { CoreCourse, CoreCourseProvider, CoreCourseWSSection } from '@features/course/services/course';
+import { CoreCourse, CoreCourseWSSection } from '@features/course/services/course';
 import { CoreCourseHelper, CoreCourseModuleData } from '@features/course/services/course-helper';
-import { CoreUtils } from '@services/utils/utils';
+import { CorePromiseUtils } from '@singletons/promise-utils';
 import { CoreNavigationOptions, CoreNavigator } from '@services/navigator';
-import { CONTENTS_PAGE_NAME } from '@features/course/constants';
-import { CoreDomUtils } from '@services/utils/dom';
+import { CORE_COURSE_CONTENTS_PAGE_NAME, CORE_COURSE_PROGRESS_UPDATED_EVENT } from '@features/course/constants';
 import { CoreCoursesHelper, CoreCourseWithImageAndColor } from '@features/courses/services/courses-helper';
 import { CoreColors } from '@singletons/colors';
 import { CorePath } from '@singletons/path';
 import { CoreSites } from '@services/sites';
 import { CoreWait } from '@singletons/wait';
+import { CoreAlerts } from '@services/overlays/alerts';
+import { CoreSharedModule } from '@/core/shared.module';
 
 /**
  * Page that displays the list of courses the user is enrolled in.
@@ -38,9 +39,13 @@ import { CoreWait } from '@singletons/wait';
 @Component({
     selector: 'page-core-course-index',
     templateUrl: 'index.html',
-    styleUrls: ['index.scss'],
+    styleUrl: 'index.scss',
+    standalone: true,
+    imports: [
+        CoreSharedModule,
+    ],
 })
-export class CoreCourseIndexPage implements OnInit, OnDestroy {
+export default class CoreCourseIndexPage implements OnInit, OnDestroy {
 
     @ViewChild(CoreTabsOutletComponent) tabsComponent?: CoreTabsOutletComponent;
     @ViewChild('courseThumb') courseThumb?: ElementRef;
@@ -64,7 +69,7 @@ export class CoreCourseIndexPage implements OnInit, OnDestroy {
     protected isGuest = false;
     protected openModule = true;
     protected contentsTab: CoreTabsOutletTab & { pageParams: Params } = {
-        page: CONTENTS_PAGE_NAME,
+        page: CORE_COURSE_CONTENTS_PAGE_NAME,
         title: 'core.course',
         pageParams: {},
     };
@@ -93,7 +98,7 @@ export class CoreCourseIndexPage implements OnInit, OnDestroy {
 
         const siteId = CoreSites.getCurrentSiteId();
 
-        this.progressObserver = CoreEvents.on(CoreCourseProvider.PROGRESS_UPDATED, (data) => {
+        this.progressObserver = CoreEvents.on(CORE_COURSE_PROGRESS_UPDATED_EVENT, (data) => {
             if (!this.course || this.course.id !== data.courseId || !('progress' in this.course)) {
                 return;
             }
@@ -119,7 +124,7 @@ export class CoreCourseIndexPage implements OnInit, OnDestroy {
         try {
             this.course = CoreNavigator.getRequiredRouteParam('course');
         } catch (error) {
-            CoreDomUtils.showErrorModal(error);
+            CoreAlerts.showError(error);
             CoreNavigator.back();
             this.loaded = true;
 
@@ -234,7 +239,7 @@ export class CoreCourseIndexPage implements OnInit, OnDestroy {
         this.updateProgress();
 
         // Load sections.
-        this.sections = await CoreUtils.ignoreErrors(CoreCourse.getSections(this.course.id, false, true), []);
+        this.sections = await CorePromiseUtils.ignoreErrors(CoreCourse.getSections(this.course.id, false, true), []);
 
         if (!this.sections) {
             return;
@@ -318,7 +323,7 @@ export class CoreCourseIndexPage implements OnInit, OnDestroy {
             const tint = CoreColors.lighter(this.course.color, 50);
             this.courseThumb.nativeElement.style.setProperty('--course-color-tint', tint);
         } else if(this.course.colorNumber !== undefined) {
-            this.courseThumb.nativeElement.classList.add('course-color-' + this.course.colorNumber);
+            this.courseThumb.nativeElement.classList.add(`course-color-${this.course.colorNumber}`);
         }
     }
 
