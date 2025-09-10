@@ -58,7 +58,7 @@ import { CoreUserProfileFieldComponent } from '@features/user/components/user-pr
 export default class CoreLoginEmailSignupPage implements OnInit {
 
     // Accept A-Z in strict chars pattern to be able to differentiate it from the lowercase pattern.
-    protected static readonly USERNAME_STRICT_CHARS_PATTERN = '^[A-Z-.@_a-z0-9]*$';
+    protected static readonly USERNAME_STRICT_CHARS_PATTERN = '^[-.@_a-z0-9]*$';
     protected static readonly USERNAME_LOWERCASE_PATTERN = '^[^A-Z]*$';
 
     @ViewChild(CoreRecaptchaComponent) recaptchaComponent?: CoreRecaptchaComponent;
@@ -122,8 +122,8 @@ export default class CoreLoginEmailSignupPage implements OnInit {
         this.usernameErrors = {
             required: 'core.login.usernamerequired',
             pattern: {
-                [CoreLoginEmailSignupPage.USERNAME_STRICT_CHARS_PATTERN]: 'core.login.invalidusername',
-                [CoreLoginEmailSignupPage.USERNAME_LOWERCASE_PATTERN]: 'core.login.usernamelowercase',
+                [CoreLoginEmailSignupPage.USERNAME_STRICT_CHARS_PATTERN]: 'core.login.invalidusername'
+                
             },
         };
         this.passwordErrors = { required: 'core.login.passwordrequired' };
