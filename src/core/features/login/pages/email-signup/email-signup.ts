@@ -121,10 +121,7 @@ export default class CoreLoginEmailSignupPage implements OnInit {
         // Setup validation errors.
         this.usernameErrors = {
             required: 'core.login.usernamerequired',
-            pattern: {
-                [CoreLoginEmailSignupPage.USERNAME_STRICT_CHARS_PATTERN]: 'core.login.invalidusername'
-                
-            },
+            pattern: 'core.login.invalidusername',
         };
         this.passwordErrors = { required: 'core.login.passwordrequired' };
         this.emailErrors = { required: 'core.login.missingemail' };
@@ -163,8 +160,7 @@ export default class CoreLoginEmailSignupPage implements OnInit {
         const checkStrictChars = this.settings?.extendedusernamechars === false;
         this.signupForm.addControl('username', this.fb.control('', Validators.compose([
             Validators.required,
-            Validators.pattern(CoreLoginEmailSignupPage.USERNAME_LOWERCASE_PATTERN),
-            checkStrictChars ?  Validators.pattern(CoreLoginEmailSignupPage.USERNAME_STRICT_CHARS_PATTERN) : undefined,
+            Validators.pattern(CoreLoginEmailSignupPage.USERNAME_STRICT_CHARS_PATTERN)
         ])));
 
         this.signupForm.addControl('city', this.fb.control(this.settings?.defaultcity || ''));
