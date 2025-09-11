@@ -96,20 +96,17 @@
                             autocorrect="off">
                             <div slot="label" [core-mark-required]="true">{{ 'core.login.username' | translate }}</div>
                         </ion-input>
-                        <p *ngIf="settings.usernamepolicy" class="core-input-footnote">
-                            {{settings.usernamepolicy}}
-                        </p>
                         <core-input-errors [control]="signupForm.controls.username" [errorMessages]="usernameErrors" />
                     </ion-item>
                     <ion-item class="ion-text-wrap">
                         <ion-input labelPlacement="stacked" name="password" type="password"
                             placeholder="{{ 'core.login.password' | translate }}" formControlName="password" [clearOnEdit]="false"
                             autocomplete="new-password" required="true">
-                            <div slot="label" [core-mark-required]="true">{{ 'core.login.password' | translate }}</div>
+                            <div slot="label" [core-mark-required]="true">{{ 'core.login.password' | translate }}</div
                             <ion-input-password-toggle slot="end" showIcon="fas-eye" hideIcon="fas-eye-slash" />
                         </ion-input>
-                        <p class="core-input-footnote">
-                            Solo se permiten caracteres alfanuméricos
+                        <p *ngIf="settings.passwordpolicy" class="core-input-footnote">
+                            {{settings.passwordpolicy}}
                         </p>
                         <core-input-errors [control]="signupForm.controls.password" [errorMessages]="passwordErrors" />
                     </ion-item>
